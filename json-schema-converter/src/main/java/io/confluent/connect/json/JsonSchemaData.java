@@ -26,14 +26,14 @@ import org.apache.kafka.common.cache.Cache;
 import org.apache.kafka.common.cache.LRUCache;
 import org.apache.kafka.common.cache.SynchronizedCache;
 import org.apache.kafka.connect.data.ConnectSchema;
-import org.apache.kafka.connect.data.Date;
+import io.confluent.connect.json.data.Date;
 import org.apache.kafka.connect.data.Decimal;
 import org.apache.kafka.connect.data.Field;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Struct;
 import org.apache.kafka.connect.data.Time;
-import org.apache.kafka.connect.data.Timestamp;
+import io.confluent.connect.json.data.Timestamp;
 import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.json.JsonConverterConfig;
 import org.everit.json.schema.ArraySchema;
@@ -248,12 +248,12 @@ public class JsonSchemaData {
     });
 
     TO_CONNECT_LOGICAL_CONVERTERS.put(Date.LOGICAL_NAME, (schema, value) -> {
-      if (!(value.isInt())) {
+      if (!(value.isTextual())) {
         throw new DataException(
             "Invalid type for Date, "
-            + "underlying representation should be integer but was " + value.getNodeType());
+            + "underlying representation should be string but was " + value.getNodeType());
       }
-      return Date.toLogical(schema, value.intValue());
+      return Date.toLogical(schema, value.textValue());
     });
 
     TO_CONNECT_LOGICAL_CONVERTERS.put(Time.LOGICAL_NAME, (schema, value) -> {
@@ -266,12 +266,12 @@ public class JsonSchemaData {
     });
 
     TO_CONNECT_LOGICAL_CONVERTERS.put(Timestamp.LOGICAL_NAME, (schema, value) -> {
-      if (!(value.isIntegralNumber())) {
+      if (!(value.isTextual())) {
         throw new DataException(
             "Invalid type for Timestamp, "
-            + "underlying representation should be integral but was " + value.getNodeType());
+            + "underlying representation should be string but was " + value.getNodeType());
       }
-      return Timestamp.toLogical(schema, value.longValue());
+      return Timestamp.toLogical(schema, value.textValue());
     });
   }
 
@@ -299,9 +299,9 @@ public class JsonSchemaData {
 
     TO_JSON_LOGICAL_CONVERTERS.put(Date.LOGICAL_NAME, (schema, value, config) -> {
       if (!(value instanceof java.util.Date)) {
-        throw new DataException("Invalid type for Date, expected Date but was " + value.getClass());
+        throw new DataException("Invalid type for Date, expected String but was " + value.getClass());
       }
-      return JSON_NODE_FACTORY.numberNode(Date.fromLogical(schema, (java.util.Date) value));
+      return JSON_NODE_FACTORY.textNode(value.toString());
     });
 
     TO_JSON_LOGICAL_CONVERTERS.put(Time.LOGICAL_NAME, (schema, value, config) -> {
@@ -314,10 +314,9 @@ public class JsonSchemaData {
     TO_JSON_LOGICAL_CONVERTERS.put(Timestamp.LOGICAL_NAME, (schema, value, config) -> {
       if (!(value instanceof java.util.Date)) {
         throw new DataException("Invalid type for Timestamp, "
-            + "expected Date but was " + value.getClass());
+            + "expected String but was " + value.getClass());
       }
-      return JSON_NODE_FACTORY.numberNode(
-          Timestamp.fromLogical(schema, (java.util.Date) value));
+      return JSON_NODE_FACTORY.textNode(value.toString());
     });
   }
 
@@ -601,12 +600,20 @@ public class JsonSchemaData {
         unprocessedProps.put(CONNECT_TYPE_PROP, CONNECT_TYPE_INT16);
         break;
       case INT32:
-        builder = NumberSchema.builder().requiresInteger(true);
-        unprocessedProps.put(CONNECT_TYPE_PROP, CONNECT_TYPE_INT32);
+        if (schema.name() == "org.apache.kafka.connect.data.Date") {
+          builder = StringSchema.builder();
+        } else {
+          builder = NumberSchema.builder().requiresInteger(true);
+          unprocessedProps.put(CONNECT_TYPE_PROP, CONNECT_TYPE_INT32);
+        }
         break;
       case INT64:
-        builder = NumberSchema.builder().requiresInteger(true);
-        unprocessedProps.put(CONNECT_TYPE_PROP, CONNECT_TYPE_INT64);
+        if (schema.name() == "org.apache.kafka.connect.date.Timestamp") {
+          builder = StringSchema.builder();
+        } else {
+          builder = NumberSchema.builder().requiresInteger(true);
+          unprocessedProps.put(CONNECT_TYPE_PROP, CONNECT_TYPE_INT64);
+        }
         break;
       case FLOAT32:
         builder = NumberSchema.builder().requiresInteger(false);
