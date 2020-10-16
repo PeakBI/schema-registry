@@ -1,4 +1,5 @@
 /*
+ * Copyright .* Confluent Inc.
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,51 +15,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.confluent.connect.json.data;
 
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Schema;
 import org.apache.kafka.connect.errors.DataException;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
-/**
- * <p>
- *     A timestamp representing an absolute time, without timezone information. The corresponding Java type is a
- *     java.util.Date. The underlying representation is a long representing the number of milliseconds since Unix epoch.
- * </p>
- */
+
 public class Timestamp {
-    public static final String LOGICAL_NAME = "org.apache.kafka.connect.data.Timestamp";
+  public static final String LOGICAL_NAME = "org.apache.kafka.connect.data.Timestamp";
 
-    /**
-     * Returns a SchemaBuilder for a Timestamp. By returning a SchemaBuilder you can override additional schema settings such
-     * as required/optional, default value, and documentation.
-     * @return a SchemaBuilder
-     */
-    public static SchemaBuilder builder() {
-        return SchemaBuilder.string()
-                .name(LOGICAL_NAME)
-                .version(1);
+  /**
+   * Returns a SchemaBuilder for a Timestamp. By returning a SchemaBuilder you can
+   * override additional schema settings such
+   * as required/optional, default value, and documentation.
+   * @return a SchemaBuilder
+   */
+  public static SchemaBuilder builder() {
+    return SchemaBuilder.string()
+            .name(LOGICAL_NAME)
+            .version(1);
+  }
+
+  public static final Schema SCHEMA = builder().schema();
+
+  /**
+   * Convert a value from its logical format (Date) to it's encoded format.
+   * @param value the logical value
+   * @return the encoded value
+   */
+  public static String fromLogical(Schema schema, java.util.Date value) {
+    if (!(LOGICAL_NAME.equals(schema.name()))) {
+      throw new DataException("Requested conversion of Timestamp object "
+          + "but the schema does not match.");
     }
+    return value.toString();
+  }
 
-    public static final Schema SCHEMA = builder().schema();
 
-    /**
-     * Convert a value from its logical format (Date) to it's encoded format.
-     * @param value the logical value
-     * @return the encoded value
-     */
-    public static String fromLogical(Schema schema, java.util.Date value) {
-        if (!(LOGICAL_NAME.equals(schema.name())))
-            throw new DataException("Requested conversion of Timestamp object but the schema does not match.");
-        return value.toString();
+  public static String toLogical(Schema schema, String value) {
+    if (!(LOGICAL_NAME.equals(schema.name()))) {
+      throw new DataException("Requested conversion of Timestamp object "
+          + "but the schema does not match.");
     }
-
-
-    public static String toLogical(Schema schema, String value) {
-        if (!(LOGICAL_NAME.equals(schema.name())))
-            throw new DataException("Requested conversion of Timestamp object but the schema does not match.");
-        return value;
-    }
+    return value;
+  }
 }

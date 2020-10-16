@@ -1,4 +1,5 @@
 /*
+ * Copyright .* Confluent Inc.
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,54 +15,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.confluent.connect.json.data;
 
 import org.apache.kafka.connect.errors.DataException;
 import org.apache.kafka.connect.data.SchemaBuilder;
 import org.apache.kafka.connect.data.Schema;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.TimeZone;
-import java.text.ParseException;
-
-/**
- * <p>
- *     A date representing a calendar day with no time of day or timezone. The corresponding Java type is a java.util.Date
- *     with hours, minutes, seconds, milliseconds set to 0. The underlying representation is an integer representing the
- *     number of standardized days (based on a number of milliseconds with 24 hours/day, 60 minutes/hour, 60 seconds/minute,
- *     1000 milliseconds/second with n) since Unix epoch.
- * </p>
- */
 public class Date {
-    public static final String LOGICAL_NAME = "org.apache.kafka.connect.data.Date";
-    /**
-     * Returns a SchemaBuilder for a Date. By returning a SchemaBuilder you can override additional schema settings such
-     * as required/optional, default value, and documentation.
-     * @return a SchemaBuilder
-     */
-    public static SchemaBuilder builder() {
-      return SchemaBuilder.string()
-                .name(LOGICAL_NAME)
-                .version(1);
-    }
+  public static final String LOGICAL_NAME = "org.apache.kafka.connect.data.Date";
 
-    public static final Schema SCHEMA = builder().schema();
+  /**
+   * Returns a SchemaBuilder for a Date. By returning a SchemaBuilder you can override
+   * additional schema settings such
+   * as required/optional, default value, and documentation.
+   * @return a SchemaBuilder
+   */
+  public static SchemaBuilder builder() {
+    return SchemaBuilder.string()
+              .name(LOGICAL_NAME)
+              .version(1);
+  }
 
-    /**
-     * Convert a value from its logical format (Date) to it's encoded format.
-     * @param value the logical value
-     * @return the encoded value
-     */
-    public static String fromLogical(Schema schema, java.util.Date value) {
-        if (!(LOGICAL_NAME.equals(schema.name())))
-            throw new DataException("Requested conversion of Date object but the schema does not match.");
-        return value.toString();
-    }
+  public static final Schema SCHEMA = builder().schema();
 
-    public static String toLogical(Schema schema, String value) {
-        if (!(LOGICAL_NAME.equals(schema.name())))
-            throw new DataException("Requested conversion of Date object but the schema does not match.");
-        return value;
+  /**
+   * Convert a value from its logical format (Date) to it's encoded format.
+   * @param value the logical value
+   * @return the encoded value
+   */
+  public static String fromLogical(Schema schema, java.util.Date value) {
+    if (!(LOGICAL_NAME.equals(schema.name()))) {
+      throw new DataException("Requested conversion of Date object "
+          + " but the schema does not match.");
     }
+    return value.toString();
+  }
+
+  public static String toLogical(Schema schema, String value) {
+    if (!(LOGICAL_NAME.equals(schema.name()))) {
+      throw new DataException("Requested conversion of Date object "
+          + "but the schema does not match.");
+    }
+    return value;
+  }
 }

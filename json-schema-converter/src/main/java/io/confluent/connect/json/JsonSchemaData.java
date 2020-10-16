@@ -299,7 +299,8 @@ public class JsonSchemaData {
 
     TO_JSON_LOGICAL_CONVERTERS.put(Date.LOGICAL_NAME, (schema, value, config) -> {
       if (!(value instanceof java.util.Date)) {
-        throw new DataException("Invalid type for Date, expected String but was " + value.getClass());
+        throw new DataException("Invalid type for Date, expected String but was "
+            + value.getClass());
       }
       return JSON_NODE_FACTORY.textNode(value.toString());
     });
