@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+    <suppress checks="ParameterName"
+              files="ErrorMessage.java"/>
+
+    <suppress checks="ParameterNumber"
+              files="SchemaRegistryCoordinator.java"/>
+
+    <suppress checks="ClassDataAbstractionCoupling"
+              files="(AbstractKafkaAvroDeserializer|AbstractKafkaAvroSerializer|RestService|Errors|SchemaRegistryRestApplication|KafkaSchemaRegistry|KafkaStore|AvroConverter|AvroData|KafkaGroupLeaderElector|ProtobufSchema|ProtobufData|JsonSchemaData|InMemoryCache|SchemaMessageReader|JsonSchemaConverter|MetricsContainer).java"/>
+
+    <suppress checks="ClassFanOutComplexity"
+              files="(RestService|KafkaSchemaRegistry|KafkaStore|KafkaStoreReaderThread|AvroData|KafkaGroupLeaderElector).java"/>
+
+    <suppress checks="LineLength"
+              files="(Errors|AvroMessageReader).java"/>
+
+    <suppress checks="CyclomaticComplexity"
+              files="(AbstractKafkaAvroDeserializer|AbstractKafkaAvroSerializer|AvroSchemaUtils|CompatibilityResource|KafkaSchemaRegistry|KafkaStoreReaderThread|AvroData|DownloadSchemaRegistryMojo|MockSchemaRegistryClient|SchemaRegistrySerializer|SchemaValue|SubjectVersionsResource|ProtobufSchema|SchemaDiff|FieldSchemaDiff|MessageSchemaDiff|DynamicSchema|SchemaMessageFormatter|ProtobufData|JsonSchema|JSON.*|AbstractKafkaJsonSchemaDeserializer|JsonSchemaData|JsonSchemaUtils|SchemaMessageReader).java"/>
+
+    <suppress checks="NPathComplexity"
+              files="(AvroData|DownloadSchemaRegistryMojo|KafkaSchemaRegistry|KafkaStoreReaderThread|Schema|SchemaValue|SchemaDiff|MessageSchemaDiff|ProtobufData|JsonSchemaData|SchemaMessageFormatter|SchemaMessageReader).java"/>
+
+    <suppress checks="JavaNCSS"
+              files="(AvroData|ProtobufData|SchemaDiff|NumberSchemaDiff|JsonSchemaData|KafkaSchemaRegistry|KafkaStoreReaderThread|ProtobufSchema).java"/>
+
+    <suppress checks="MethodLength"
+              files="AvroData.java"/>
+
+    <suppress checks="AbbreviationAsWordInName"
+              files="(.*SchemaRegistryClient|JSON.*).java"/>
+
+    <suppress checks="MethodLength"
+              files="(SchemaRegistryConfig|ProtobufData|JsonSchemaData).java"/>
+
+    <suppress checks="BooleanExpressionComplexity"
+              files="AvroData.java"/>
+
+    <suppress checks="MemberName"
+              files="(DynamicSchema|EnumDefinition|MessageDefinition).java"/>
+
+</suppressions>
