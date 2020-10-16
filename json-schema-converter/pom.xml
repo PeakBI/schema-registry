@@ -25,6 +25,14 @@
     <packaging>jar</packaging>
     <name>kafka-connect-json-schema-converter</name>
 
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <name>Confluent</name>
+            <url>http://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>io.confluent</groupId>
