@@ -132,8 +132,6 @@ public class JsonSchemaConverter extends AbstractKafkaSchemaSerDe implements Con
       if (value == null) {
         return null;
       }
-      System.out.println("Subject name: " + getSubjectName(topic, isKey, value, schema));
-      System.out.println("Calling serialize: " + value + " schema: " + schema);
       return serializeImpl(getSubjectName(topic, isKey, value, schema), value, schema);
     }
   }
